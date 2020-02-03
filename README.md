@@ -5,6 +5,9 @@
 ## Usage
 ```
 :Gof
+
+:let g:gof_mru = 1 " in .vimrc
+:Gof mru
 ```
 
 ### Requirements
