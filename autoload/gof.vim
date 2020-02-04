@@ -2,7 +2,7 @@
 " Filename: autoload/gof.vim
 " Author: itchyny
 " License: MIT License
-" Last Change: 2020/02/04 12:03:32.
+" Last Change: 2020/02/04 12:07:53.
 " =============================================================================
 
 function! gof#start(args) abort
@@ -12,7 +12,7 @@ function! gof#start(args) abort
   elseif s:is_git_repo()
     let command = [&shell, &shellcmdflag, 'git ls-files | gof -tf gof#tapi']
   endif
-  call term_start(
+  belowright call term_start(
         \ command,
         \ #{ term_rows: max([&lines / 4, 10]), term_finish: 'close', term_api: 'gof#tapi' }
         \ )
