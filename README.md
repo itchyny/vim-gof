@@ -9,7 +9,7 @@
 
 ### Requirements
 - Vim with terminal feature (`exists('*term_start')`)
-- https://github.com/mattn/gof
+- [gof](https://github.com/mattn/gof)
 
 ## Author
 itchyny (https://github.com/itchyny)
