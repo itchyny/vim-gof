@@ -2,7 +2,7 @@
 " Filename: autoload/gof.vim
 " Author: itchyny
 " License: MIT License
-" Last Change: 2020/02/04 11:48:45.
+" Last Change: 2020/02/04 11:51:15.
 " =============================================================================
 
 function! gof#start(args) abort
@@ -15,9 +15,8 @@ function! gof#start(args) abort
   let [w, h] = [80, min([25, &lines - 5])]
   let bufnr = term_start(
         \ command,
-        \ #{ hidden: 1, term_rows: h, term_cols: w, term_finish: 'close' }
+        \ #{ hidden: 1, term_rows: h, term_cols: w, term_finish: 'close', term_api: 'gof#tapi' }
         \ )
-  call term_setapi(bufnr, 'gof#tapi')
   call popup_create(
         \ bufnr,
         \ #{ maxwidth: w, maxheight: h, minwidth: w, minheight: h }
