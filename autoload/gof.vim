@@ -2,13 +2,15 @@
 " Filename: autoload/gof.vim
 " Author: itchyny
 " License: MIT License
-" Last Change: 2020/02/04 01:40:01.
+" Last Change: 2020/02/04 11:48:45.
 " =============================================================================
 
 function! gof#start(args) abort
   let command = ['gof', '-tf', 'gof#tapi']
   if a:args ==# 'mru'
     let command = [&shell, &shellcmdflag, 'cat ' .. shellescape(gof#mru_path()) .. ' | gof -tf gof#tapi']
+  elseif s:is_git_repo()
+    let command = [&shell, &shellcmdflag, 'git ls-files | gof -tf gof#tapi']
   endif
   let [w, h] = [80, min([25, &lines - 5])]
   let bufnr = term_start(
@@ -20,6 +22,11 @@ function! gof#start(args) abort
         \ bufnr,
         \ #{ maxwidth: w, maxheight: h, minwidth: w, minheight: h }
         \ )
+endfunction
+
+function! s:is_git_repo() abort
+  silent! call system('git rev-parse')
+  return v:shell_error == 0
 endfunction
 
 function! gof#tapi(bufnr, arg) abort
