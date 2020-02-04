@@ -2,10 +2,10 @@
 " Filename: plugin/gof.vim
 " Author: itchyny
 " License: MIT License
-" Last Change: 2020/02/04 12:06:15.
+" Last Change: 2020/02/04 12:17:24.
 " =============================================================================
 
-if exists('g:loaded_gof') || !exists('*term_start')
+if exists('g:loaded_gof') || !exists('*term_start') || !executable('gof')
   finish
 endif
 let g:loaded_gof = 1
