@@ -2,7 +2,7 @@
 " Filename: autoload/gof.vim
 " Author: itchyny
 " License: MIT License
-" Last Change: 2020/02/04 12:07:53.
+" Last Change: 2020/02/04 14:22:08.
 " =============================================================================
 
 function! gof#start(args) abort
@@ -24,7 +24,14 @@ function! s:is_git_repo() abort
 endfunction
 
 function! gof#tapi(bufnr, arg) abort
-  call timer_start(50, {->execute('edit ' .. expand(a:arg.filename))})
+  call timer_start(50, {->execute('edit ' .. s:expand(a:arg.filename))})
+endfunction
+
+function! s:expand(path) abort
+  if a:path =~# '^[~]'
+    return $HOME .. a:path[1:]
+  endif
+  return a:path
 endfunction
 
 let s:files = []
@@ -33,14 +40,17 @@ function! gof#mru_opened(name) abort
   if !filereadable(a:name)
     return
   endif
-  let name = a:name
-  let home = $HOME
-  if len(name) > len(home) && name[:len(home)-1] == home
-    let name = '~' .. name[len(home):]
-  endif
+  let name = s:unexpand(a:name)
   call filter(s:files, {->v:val !=# name})
   call insert(s:files, name, 0)
   let s:files_map[name] = v:false
+endfunction
+
+function! s:unexpand(path) abort
+  if stridx(a:path, $HOME) == 0
+    return '~' .. a:path[len($HOME):]
+  endif
+  return a:path
 endfunction
 
 function! gof#mru_path() abort
