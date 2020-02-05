@@ -2,7 +2,7 @@
 " Filename: autoload/gof.vim
 " Author: itchyny
 " License: MIT License
-" Last Change: 2020/02/05 09:03:02.
+" Last Change: 2020/02/05 20:39:58.
 " =============================================================================
 
 function! gof#start(args) abort
@@ -10,7 +10,7 @@ function! gof#start(args) abort
   if a:args ==# 'mru'
     let command = [&shell, &shellcmdflag, 'cat ' .. shellescape(gof#mru_path()) .. ' | gof -tf gof#tapi']
   elseif s:is_git_repo()
-    let command = [&shell, &shellcmdflag, 'git ls-files | gof -tf gof#tapi']
+    let command = [&shell, &shellcmdflag, 'git ls-files ' .. s:get_git_root() .. ' | gof -tf gof#tapi']
   endif
   botright call term_start(
         \ command,
@@ -21,6 +21,20 @@ endfunction
 function! s:is_git_repo() abort
   silent! call system('git rev-parse')
   return v:shell_error == 0
+endfunction
+
+function! s:get_git_root() abort
+  let path = expand('%:p:h')
+  let prev = ''
+  while path !=# prev
+    let dir = path . '/.git'
+    if !empty(getftype(dir))
+      return path
+    endif
+    let prev = path
+    let path = fnamemodify(path, ':h')
+  endwhile
+  return ''
 endfunction
 
 function! gof#tapi(bufnr, arg) abort
