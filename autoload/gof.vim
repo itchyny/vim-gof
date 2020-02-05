@@ -2,7 +2,7 @@
 " Filename: autoload/gof.vim
 " Author: itchyny
 " License: MIT License
-" Last Change: 2020/02/05 20:39:58.
+" Last Change: 2020/02/05 22:04:37.
 " =============================================================================
 
 function! gof#start(args) abort
@@ -27,8 +27,7 @@ function! s:get_git_root() abort
   let path = expand('%:p:h')
   let prev = ''
   while path !=# prev
-    let dir = path . '/.git'
-    if !empty(getftype(dir))
+    if !empty(getftype(path .. '/.git'))
       return path
     endif
     let prev = path
