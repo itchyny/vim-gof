@@ -2,7 +2,7 @@
 " Filename: autoload/gof.vim
 " Author: itchyny
 " License: MIT License
-" Last Change: 2020/02/05 22:04:37.
+" Last Change: 2020/02/06 10:24:05.
 " =============================================================================
 
 function! gof#start(args) abort
@@ -65,6 +65,9 @@ function! gof#mru_list() abort
 endfunction
 
 function! gof#mru_save() abort
+  if empty(s:files)
+    return
+  endif
   eval s:files->extend(
         \   gof#mru_list()->filter('get(s:files_map, v:val, v:true)')
         \ )[:99999]->writefile(gof#mru_path())
