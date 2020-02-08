@@ -2,7 +2,7 @@
 " Filename: autoload/gof.vim
 " Author: itchyny
 " License: MIT License
-" Last Change: 2020/02/06 22:04:43.
+" Last Change: 2020/02/08 13:31:56.
 " =============================================================================
 
 function! gof#start(args) abort
@@ -43,7 +43,7 @@ endfunction
 let s:files = []
 let s:files_map = {}
 function! gof#mru_opened(name) abort
-  if !filereadable(a:name)
+  if !empty(&buftype) || !filereadable(a:name)
     return
   endif
   let name = fnamemodify(a:name, ':~')
