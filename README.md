@@ -1,6 +1,6 @@
 # vim-gof
 
-![gof](https://user-images.githubusercontent.com/375258/73711173-5c99f600-4749-11ea-9e57-df11a9c31acf.gif)
+![gof](https://user-images.githubusercontent.com/375258/74085564-6448fa00-4abd-11ea-8122-4786b75c9f78.gif)
 
 ## Usage
 ```
