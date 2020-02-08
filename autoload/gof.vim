@@ -2,15 +2,15 @@
 " Filename: autoload/gof.vim
 " Author: itchyny
 " License: MIT License
-" Last Change: 2020/02/08 13:31:56.
+" Last Change: 2020/02/08 22:08:49.
 " =============================================================================
 
 function! gof#start(args) abort
-  let command = ['gof', '-tf', 'gof#tapi']
+  let command = ['gof', '-a', 'ctrl-t,ctrl-v', '-tf', 'gof#tapi']
   if a:args ==# 'mru'
-    let command = [&shell, &shellcmdflag, 'cat ' .. shellescape(gof#mru_path()) .. ' | gof -tf gof#tapi']
+    let command = [&shell, &shellcmdflag, 'cat ' .. shellescape(gof#mru_path()) .. ' | ' .. join(command, ' ')]
   elseif s:is_git_repo()
-    let command = [&shell, &shellcmdflag, 'git ls-files ' .. s:get_git_root() .. ' | gof -tf gof#tapi']
+    let command = [&shell, &shellcmdflag, 'git ls-files ' .. s:get_git_root() .. ' | ' .. join(command, ' ')]
   endif
   botright call term_start(
         \ command,
@@ -37,7 +37,8 @@ function! s:get_git_root() abort
 endfunction
 
 function! gof#tapi(bufnr, arg) abort
-  call timer_start(50, {->execute('edit ' .. fnamemodify(a:arg.filename, ':p'))})
+  let command = get({ 'ctrl-t': 'tabnew', 'ctrl-v': 'vnew' }, a:arg.action_key, 'edit')
+  call timer_start(50, {->execute(command .. ' ' .. fnamemodify(a:arg.filename, ':p'))})
 endfunction
 
 let s:files = []
