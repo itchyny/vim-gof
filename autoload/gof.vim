@@ -2,7 +2,7 @@
 " Filename: autoload/gof.vim
 " Author: itchyny
 " License: MIT License
-" Last Change: 2020/02/11 19:19:05.
+" Last Change: 2020/02/11 22:09:29.
 " =============================================================================
 
 function! gof#start(args) abort
@@ -76,7 +76,12 @@ function! gof#mru_save() abort
   let path = gof#mru_path()
   let tmp = fnamemodify(path, ':r') .. '.' .. rand(srand()) .. '.txt'
   call writefile(
-        \ extend(s:files, filter(gof#mru_list(), 'get(s:files_map, v:val, v:true)'))[:99999],
+        \ extend(s:files,
+        \   filter(gof#mru_list(),
+        \     'get(s:files_map, v:val, v:true) &&
+        \       (v:key % 10 > 0 || filereadable(fnamemodify(v:val, ":p")))'
+        \   )
+        \ )[:99999],
         \ tmp)
   call rename(tmp, path)
 endfunction
