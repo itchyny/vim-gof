@@ -2,13 +2,17 @@
 " Filename: autoload/gof.vim
 " Author: itchyny
 " License: MIT License
-" Last Change: 2020/02/08 22:08:49.
+" Last Change: 2020/02/11 19:19:05.
 " =============================================================================
 
 function! gof#start(args) abort
   let command = ['gof', '-a', 'ctrl-t,ctrl-v', '-tf', 'gof#tapi']
   if a:args ==# 'mru'
-    let command = [&shell, &shellcmdflag, 'cat ' .. shellescape(gof#mru_path()) .. ' | ' .. join(command, ' ')]
+    if filereadable(gof#mru_path())
+      let command = [&shell, &shellcmdflag, 'cat ' .. shellescape(gof#mru_path()) .. ' | ' .. join(command, ' ')]
+    else
+      let command = [&shell, &shellcmdflag, 'true | ' .. join(command, ' ')]
+    endif
   elseif s:is_git_repo()
     let command = [&shell, &shellcmdflag, 'git ls-files ' .. s:get_git_root() .. ' | ' .. join(command, ' ')]
   endif
