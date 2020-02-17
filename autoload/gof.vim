@@ -5,6 +5,9 @@
 " Last Change: 2020/02/13 18:35:01.
 " =============================================================================
 
+let s:save_cpo = &cpo
+set cpo&vim
+
 function! gof#start(args) abort
   let command = ['gof', '-a', 'ctrl-t,ctrl-v', '-tf', 'gof#tapi']
   if a:args ==# 'mru'
@@ -98,3 +101,6 @@ function! gof#mru_save(...) abort
     autocmd!
   augroup END
 endfunction
+
+let &cpo = s:save_cpo
+unlet s:save_cpo
