@@ -2,7 +2,7 @@
 " Filename: autoload/gof.vim
 " Author: itchyny
 " License: MIT License
-" Last Change: 2020/02/13 18:35:01.
+" Last Change: 2020/03/06 15:51:38.
 " =============================================================================
 
 function! gof#start(args) abort
@@ -59,8 +59,9 @@ function! gof#mru_opened(name) abort
 endfunction
 
 function! gof#mru_path() abort
-  let cache_home = exists('$XDG_CACHE_HOME') ? $XDG_CACHE_HOME : $HOME .. '/.cache'
-  let dir = cache_home .. '/vim-gof'
+  let data_home = has('win32') && exists('$LOCALAPPDATA') ? $LOCALAPPDATA
+        \ : exists('$XDG_DATA_HOME') ? $XDG_DATA_HOME : expand('~/.local/share')
+  let dir = data_home .. '/vim-gof'
   call mkdir(dir, 'p', 0700)
   return dir .. '/mru.txt'
 endfunction
