@@ -2,7 +2,7 @@
 " Filename: autoload/gof.vim
 " Author: itchyny
 " License: MIT License
-" Last Change: 2020/03/06 15:51:38.
+" Last Change: 2020/06/22 11:24:24.
 " =============================================================================
 
 function! gof#start(args) abort
@@ -88,7 +88,7 @@ function! gof#mru_save(...) abort
         \ extend(s:files,
         \   filter(gof#mru_list(),
         \     'get(s:files_map, v:val, v:true) &&
-        \       (v:key % 10 > 0 || filereadable(fnamemodify(v:val, ":p")))'
+        \       (v:key % 10 > 0 || glob(fnamemodify(v:val, ":p")) !=# "")'
         \   )
         \ )[:99999],
         \ tmp)
