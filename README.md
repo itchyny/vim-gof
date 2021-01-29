@@ -6,8 +6,13 @@
 ```
 :Gof
 
-:let g:gof_mru = 1 " in .vimrc
+" MRU using gof
+:let g:gof_mru = 1
 :Gof mru
+
+
+" Exclude files by pattern from MRU
+:let g:gof_mru_ignore_pattern = '\v/\.git/|/node_modules/'
 ```
 
 ### Requirements
