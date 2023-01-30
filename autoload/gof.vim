@@ -2,42 +2,21 @@
 " Filename: autoload/gof.vim
 " Author: itchyny
 " License: MIT License
-" Last Change: 2023/01/30 18:03:58.
+" Last Change: 2023/01/31 08:37:47.
 " =============================================================================
 
 function! gof#start(args) abort
-  let command = ['gof', '-a', 'ctrl-t,ctrl-v', '-tf', 'gof#tapi']
   if a:args ==# 'mru'
-    if filereadable(gof#mru_path())
-      let command = [&shell, &shellcmdflag, 'cat ' .. shellescape(gof#mru_path()) .. ' | ' .. join(command, ' ')]
-    else
-      let command = [&shell, &shellcmdflag, 'true | ' .. join(command, ' ')]
-    endif
-  elseif s:is_git_repo()
-    let command = [&shell, &shellcmdflag, 'git ls-files --deduplicate ' .. s:get_git_root() .. ' | ' .. join(command, ' ')]
+    let input = ' < ' .. (filereadable(gof#mru_path()) ? shellescape(gof#mru_path()) : '<(:)')
+  elseif empty(system('git rev-parse'))
+    let input = ' < <(git ls-files --deduplicate "$(git rev-parse --show-toplevel)")'
+  else
+    let input = ''
   endif
   botright call term_start(
-        \ command,
+        \ [&shell, &shellcmdflag, 'gof -a ctrl-t,ctrl-v -tf gof#tapi' .. input],
         \ #{ term_rows: max([&lines / 4, 10]), term_finish: 'close', term_api: 'gof#tapi' }
         \ )
-endfunction
-
-function! s:is_git_repo() abort
-  silent! call system('git rev-parse')
-  return v:shell_error == 0
-endfunction
-
-function! s:get_git_root() abort
-  let path = expand('%:p:h')
-  let prev = ''
-  while path !=# prev
-    if !empty(getftype(path .. '/.git'))
-      return path
-    endif
-    let prev = path
-    let path = fnamemodify(path, ':h')
-  endwhile
-  return ''
 endfunction
 
 function! gof#tapi(bufnr, arg) abort
