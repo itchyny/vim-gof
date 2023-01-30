@@ -2,7 +2,7 @@
 " Filename: autoload/gof.vim
 " Author: itchyny
 " License: MIT License
-" Last Change: 2021/01/29 21:29:07.
+" Last Change: 2023/01/30 18:03:58.
 " =============================================================================
 
 function! gof#start(args) abort
@@ -14,7 +14,7 @@ function! gof#start(args) abort
       let command = [&shell, &shellcmdflag, 'true | ' .. join(command, ' ')]
     endif
   elseif s:is_git_repo()
-    let command = [&shell, &shellcmdflag, 'git ls-files ' .. s:get_git_root() .. ' | ' .. join(command, ' ')]
+    let command = [&shell, &shellcmdflag, 'git ls-files --deduplicate ' .. s:get_git_root() .. ' | ' .. join(command, ' ')]
   endif
   botright call term_start(
         \ command,
