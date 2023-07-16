@@ -2,7 +2,7 @@
 " Filename: autoload/gof.vim
 " Author: itchyny
 " License: MIT License
-" Last Change: 2023/01/31 08:37:47.
+" Last Change: 2023/07/16 16:43:37.
 " =============================================================================
 
 function! gof#start(args) abort
@@ -69,7 +69,7 @@ function! gof#mru_save(...) abort
         \ extend(s:files,
         \   filter(gof#mru_list(),
         \     'get(s:files_map, v:val, v:true) &&
-        \       (v:key % 10 > 0 || glob(fnamemodify(v:val, ":p")) !=# "" &&
+        \       (v:key % 10 > 0 || filereadable(fnamemodify(v:val, ":p")) &&
         \        v:val !~# get(g:, "gof_mru_ignore_pattern", "$^"))'
         \   )
         \ )[:99999],
